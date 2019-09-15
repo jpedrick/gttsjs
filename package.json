@@ -1,0 +1,18 @@
+{
+  "name": "gttsjs",
+  "version": "0.0.1",
+  "description": "Google Text To Speech using translate.google.com",
+  "main": "tts.js",
+  "scripts": {
+    "test": "tsc tts.ts && node tts.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "file-system": "^2.2.2",
+    "fs": "0.0.1-security",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "utf8": "^3.0.0"
+  }
+}
