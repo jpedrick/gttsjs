@@ -22,13 +22,13 @@ export class Token {
 
   SALT_1 = "+-a^+6";
   SALT_2 = "+-3^+b+-f";
-  token_key = null;
+  token_key:string|null = null;
 
   constructor( ){
 
   }
 
-  async calculate_token( text, seed=null ){
+  async calculate_token( text:string, seed:string|null ) : Promise<string|null> {
 
     console.log( 'seed: ' + seed )
     if ( seed == null ){
@@ -36,31 +36,37 @@ export class Token {
       console.log( 'got seed from token_key: ' + seed );
     }
 
-    var first_seed:number = null;
-    var second_seed:number = null;
-    [first_seed, second_seed] = seed.split(".")
+    if( seed ){
+      const split_seed = seed.split(".")
 
-    var d = utf8.encode( text ).split()
+      var first_seed:number = +split_seed[0];
+      var second_seed:number = +split_seed[1];
 
-    var a:number = first_seed | 0
+      var d = Array.from( utf8.encode( text ) );
 
-    d.map( v => { a += v; a = _work_token(a, this.SALT_1); } )
+      var a:number = first_seed | 0
 
-    a = _work_token(a, this.SALT_2)
+      d.map( v => { a += +v; a = _work_token(a, this.SALT_1); } )
 
-    a ^= second_seed
+      a = _work_token(a, this.SALT_2)
 
-    if ( a <= 0 ){
-      a = ( a & 0x8fff ) + 0x8ffe
+      a ^= second_seed
+
+      if ( a <= 0 ){
+        a = ( a & 0x8fff ) + 0x8ffe
+      }
+
+      a %= 1e6
+
+      console.log( 'a:' + a + ' first_seed:' + first_seed + ' a^first_seed:' + (a ^ first_seed) )
+
+      return String(a) + "." + String(a ^ first_seed)
     }
 
-    a %= 1e6
-
-    console.log( 'a:' + a + ' first_seed:' + first_seed + ' a^first_seed:' + (a ^ first_seed) )
-    return String(a) + "." + String(a ^ first_seed)
+    return null;
   }
 
-  async _get_token_key(){
+  async _get_token_key() : Promise<string|null> {
     if ( this.token_key != null ){
       return this.token_key;
     }
@@ -82,7 +88,7 @@ const key = tkn._get_token_key().then( key => {
     console.log( "TokenKey: '" + key + "'" )
   }
 )
-tkn.calculate_token( "hello world hello hello hello" ).then( tkn => {
+tkn.calculate_token( "hello world hello hello hello", null ).then( function ( tkn:string|null ) {
   console.log( "Token: '" + tkn + "'" )
 } );
 

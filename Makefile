@@ -1,6 +1,6 @@
 
 tts.js: tts.ts package-lock.json
-	tsc tts.ts
+	tsc
 
 package-lock.json:
 	npm install

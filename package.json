@@ -4,12 +4,22 @@
   "description": "Google Text To Speech using translate.google.com",
   "main": "tts.js",
   "scripts": {
-    "test": "tsc tts.ts && node tts.js"
+    "test": "tsc tts.ts && node tts.js",
+    "build": "tsc tts.ts"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpedrick/gttsjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jpedrick/gttsjs/issues"
+  },
+  "author": "Joshua Pedrick",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.7.5",
+    "@types/request-promise-native": "^1.0.16",
+    "@types/utf8": "^2.1.6",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
     "request": "^2.88.0",
