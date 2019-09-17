@@ -5,7 +5,7 @@
   "main": "tts.js",
   "scripts": {
     "test": "tsc tts.ts && node tts.js",
-    "install": "tsc tts.ts"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -17,13 +17,13 @@
   "author": "Joshua Pedrick",
   "license": "ISC",
   "devDependencies" : {
-  },
-  "dependencies": {
     "@types/node": "^12.7.5",
     "@types/request-promise-native": "^1.0.16",
     "@types/utf8": "^2.1.6",
+    "tsc": "^1.20150623.0"
+  },
+  "dependencies": {
     "file-system": "^2.2.2",
-    "tsc": "^1.20150623.0",
     "fs": "0.0.1-security",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
