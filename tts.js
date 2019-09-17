@@ -37,7 +37,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             this.token = new gtts_token.Token();
             this.lang = lang;
         }
-        fetch(text, save_to = null) {
+        uri(text) {
             return __awaiter(this, void 0, void 0, function* () {
                 if (this.token) {
                     const tk = yield this.token.calculate_token(text, null);
@@ -56,10 +56,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         // @ts-ignore
                         const params = Object.keys(payload).map(k => k + '=' + String(payload[k])).join('&');
                         const fulluri = [GOOGLE_TTS_URL, params].join('?');
-                        if (save_to != null) {
-                            request.get(fulluri).pipe(fs.createWriteStream(save_to));
-                        }
+                        return fulluri;
                     }
+                }
+                return null;
+            });
+        }
+        fetch_and_save(text, save_to) {
+            return __awaiter(this, void 0, void 0, function* () {
+                var uri = yield this.uri(text);
+                if (uri) {
+                    request.get(uri).pipe(fs.createWriteStream(save_to));
                 }
                 return null;
             });
@@ -67,7 +74,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     }
     function test() {
         var gtts = new GTTS('en-in', 0.5);
-        gtts.fetch("Ummm, Hello World, hello hello hello", 'hi.mp3');
+        gtts.fetch_and_save("Ummm, Hello World, hello hello hello", 'hi.mp3');
     }
     exports.test = test;
 });

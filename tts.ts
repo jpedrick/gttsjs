@@ -25,7 +25,7 @@ class GTTS{
     this.lang = lang;
   }
 
-  async fetch( text:string, save_to:fs.PathLike|null = null ){
+  async uri( text:string ) : Promise<string|null> {
     if( this.token ){
       const tk = await this.token.calculate_token( text, null );
 
@@ -45,10 +45,18 @@ class GTTS{
         // @ts-ignore
         const params : Array<string> = Object.keys(payload).map( k => k + '=' + String(payload[k]) ).join('&');
         const fulluri = [GOOGLE_TTS_URL, params].join('?');
-        if ( save_to != null ){
-          request.get( fulluri ).pipe( fs.createWriteStream( save_to ) );
-        } 
+
+        return fulluri;
       }
+    }
+
+    return null;
+  }
+
+  async fetch_and_save( text:string, save_to:string ){
+    var uri:string|null = await this.uri( text );
+    if( uri ){
+      request.get( uri ).pipe( fs.createWriteStream( save_to ) );
     }
 
     return null;
@@ -57,5 +65,5 @@ class GTTS{
 
 export function test(){
   var gtts = new GTTS( 'en-in', 0.5 );
-  gtts.fetch("Ummm, Hello World, hello hello hello",'hi.mp3' );
+  gtts.fetch_and_save("Ummm, Hello World, hello hello hello",'hi.mp3' );
 }
