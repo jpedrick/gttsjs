@@ -1,6 +1,4 @@
-import * as utf8 from 'utf8';
 import * as request from 'request-promise-native';
-import * as fs from 'fs';
 
 const GOOGLE_TTS_MAX_CHARS = 100;
 const GOOGLE_TTS_URL = "https://translate.google.com/translate_tts";
@@ -52,14 +50,6 @@ class GTTS{
     return null;
   }
 
-  async fetch_and_save( text:string, save_to:string ){
-    var uri:string|null = await this.uri( text );
-    if( uri ){
-      request.get( uri ).pipe( fs.createWriteStream( save_to ) );
-    }
-
-    return null;
-  }
 }
 
 function _rshift( a:number, d:number ){
@@ -102,7 +92,8 @@ export class Token {
       var first_seed:number = +split_seed[0];
       var second_seed:number = +split_seed[1];
 
-      var d = Array.from( utf8.encode( text ) );
+      //var d = Array.from( utf8.encode( text ) );
+      var d = Array.from( text );
 
       var a:number = first_seed | 0
 
@@ -142,17 +133,3 @@ export class Token {
 
 }
 
-var tkn = new Token( );
-
-const key = tkn._get_token_key().then( key => {
-    console.log( "TokenKey: '" + key + "'" )
-  }
-)
-tkn.calculate_token( "hello world hello hello hello", null ).then( function ( tkn:string|null ) {
-  console.log( "Token: '" + tkn + "'" )
-} );
-
-export function test(){
-  var gtts = new GTTS( 'en-in', 0.5 );
-  gtts.fetch_and_save("Ummm, Hello World, hello hello hello",'hi.mp3' );
-}

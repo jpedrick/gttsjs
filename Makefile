@@ -6,4 +6,4 @@ package-lock.json:
 	npm install
 
 test: package-lock.json tts.js
-	node -e 'require("./tts").test()'
+	node -e 'require("./test").test()'

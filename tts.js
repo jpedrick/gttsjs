@@ -13,14 +13,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "utf8", "request-promise-native", "fs"], factory);
+        define(["require", "exports", "request-promise-native"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const utf8 = require("utf8");
     const request = require("request-promise-native");
-    const fs = require("fs");
     const GOOGLE_TTS_MAX_CHARS = 100;
     const GOOGLE_TTS_URL = "https://translate.google.com/translate_tts";
     const GOOGLE_TTS_HEADERS = {
@@ -62,15 +60,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return null;
             });
         }
-        fetch_and_save(text, save_to) {
-            return __awaiter(this, void 0, void 0, function* () {
-                var uri = yield this.uri(text);
-                if (uri) {
-                    request.get(uri).pipe(fs.createWriteStream(save_to));
-                }
-                return null;
-            });
-        }
     }
     function _rshift(a, d) {
         return a >= 0 ? a >> d : (a + 0x100000000) >> d;
@@ -102,7 +91,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     const split_seed = seed.split(".");
                     var first_seed = +split_seed[0];
                     var second_seed = +split_seed[1];
-                    var d = Array.from(utf8.encode(text));
+                    //var d = Array.from( utf8.encode( text ) );
+                    var d = Array.from(text);
                     var a = first_seed | 0;
                     d.map(v => { a += +v; a = _work_token(a, this.SALT_1); });
                     a = _work_token(a, this.SALT_2);
@@ -131,17 +121,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         }
     }
     exports.Token = Token;
-    var tkn = new Token();
-    const key = tkn._get_token_key().then(key => {
-        console.log("TokenKey: '" + key + "'");
-    });
-    tkn.calculate_token("hello world hello hello hello", null).then(function (tkn) {
-        console.log("Token: '" + tkn + "'");
-    });
-    function test() {
-        var gtts = new GTTS('en-in', 0.5);
-        gtts.fetch_and_save("Ummm, Hello World, hello hello hello", 'hi.mp3');
-    }
-    exports.test = test;
 });
 //# sourceMappingURL=tts.js.map
